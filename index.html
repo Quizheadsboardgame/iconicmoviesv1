@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iconic Movies Quiz</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Baloo 2', sans-serif;
+            background-color: #38B6FF; /* Updated background color */
+            color: black;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        #yellow-box {
+            width: 200px;
+            height: 200px;
+            background-color: #FED405; /* Yellow color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+            border: 5px solid black; /* Black edging */
+            transition: transform 0.1s ease-in-out;
+        }
+
+        #question-answer {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Keyframes for the bounce animation */
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Class to trigger the bounce animation */
+        .animate-bounce {
+            animation: bounce 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="yellow-box">ICONIC MOVIES</div>
+
+    <div id="question-answer"></div>
+
+    <script>
+        const yellowBox = document.getElementById("yellow-box");
+        const questionAnswerDiv = document.getElementById("question-answer");
+
+        // Array of Iconic Movie trivia questions and answers
+        const movieQuestions = [
+            { question: "Who directed the movie 'Pulp Fiction'?", answer: "Quentin Tarantino" },
+            { question: "Which movie features the line 'Here's looking at you, kid'?", answer: "Casablanca" },
+            { question: "In what year was 'The Godfather' first released?", answer: "1972" },
+            { question: "Who played the iconic character Indiana Jones?", answer: "Harrison Ford" },
+            { question: "What is the name of the computer in '2001: A Space Odyssey'?", answer: "HAL 9000" },
+            { question: "Which actor portrayed the Joker in 'The Dark Knight'?", answer: "Heath Ledger" },
+            { question: "What movie is the famous quote 'May the Force be with you' from?", answer: "Star Wars" },
+            { question: "Which movie features a DeLorean as a time machine?", answer: "Back to the Future" },
+            { question: "Who directed the movie 'Schindler's List'?", answer: "Steven Spielberg" },
+            { question: "Which actress played Dorothy in 'The Wizard of Oz'?", answer: "Judy Garland" },
+            { question: "Which movie features the song 'My Heart Will Go On'?", answer: "Titanic" },
+            { question: "What is the famous phrase from 'The Terminator'?", answer: "'I'll be back.'" },
+            { question: "Which movie features a hotel called The Overlook?", answer: "The Shining" },
+            { question: "In what movie does Tom Hanks say 'Life is like a box of chocolates'?", answer: "Forrest Gump" },
+            { question: "Which film features the line 'You can't handle the truth!'?", answer: "A Few Good Men" },
+            { question: "What year was 'Jaws' released?", answer: "1975" },
+            { question: "Which movie features the quote 'To infinity and beyond!'?", answer: "Toy Story" },
+            { question: "Which classic film features a fight on Mount Rushmore?", answer: "North by Northwest" },
+            { question: "Who played James Bond in 'Goldfinger'?", answer: "Sean Connery" },
+            { question: "In which movie does Robert De Niro say 'You talkin' to me?'?", answer: "Taxi Driver" },
+            { question: "Which movie features the quote 'Say hello to my little friend!'?", answer: "Scarface" },
+            { question: "What movie is about a boy who befriends an alien?", answer: "E.T. the Extra-Terrestrial" },
+            { question: "What is the highest-grossing film of all time (as of 2023)?", answer: "Avatar" },
+            { question: "Which musical features the song 'Do-Re-Mi'?", answer: "The Sound of Music" },
+            { question: "Who starred in 'Rebel Without a Cause'?", answer: "James Dean" },
+            { question: "Which 1994 film is set inside a prison?", answer: "The Shawshank Redemption" },
+            { question: "Which 1980 film stars Jack Nicholson as a writer in a haunted hotel?", answer: "The Shining" },
+            { question: "What movie features a giant ape on the Empire State Building?", answer: "King Kong" },
+            { question: "In what year was the original 'Star Wars' released?", answer: "1977" },
+            { question: "Which 1976 film features a boxer named Rocky?", answer: "Rocky" },
+            { question: "Who directed the classic film 'Citizen Kane'?", answer: "Orson Welles" },
+            { question: "Which 1990 film stars Macaulay Culkin as a boy left alone during Christmas?", answer: "Home Alone" },
+            { question: "Which movie features the quote 'I see dead people'?", answer: "The Sixth Sense" },
+            { question: "Which movie is set in the fictional country of Wakanda?", answer: "Black Panther" },
+            { question: "Who starred as the lead in the movie 'Fight Club'?", answer: "Brad Pitt" },
+            { question: "Which movie is about a quest to destroy a powerful ring?", answer: "The Lord of the Rings" },
+            { question: "In which film does Clint Eastwood play a gunslinger named 'The Man with No Name'?", answer: "The Good, the Bad and the Ugly" },
+            { question: "Which film features the line 'I'm the king of the world!'?", answer: "Titanic" },
+            { question: "Who starred as Scarlett O'Hara in 'Gone with the Wind'?", answer: "Vivien Leigh" },
+            { question: "Which movie is set in a dystopian future ruled by machines?", answer: "The Matrix" },
+            { question: "What is the highest-grossing animated film of all time?", answer: "Frozen II" },
+            { question: "Which movie features the song 'This Is Halloween'?", answer: "The Nightmare Before Christmas" },
+            { question: "Which movie features a character called Hannibal Lecter?", answer: "The Silence of the Lambs" },
+            { question: "In which movie does a ship captain hunt down a giant whale?", answer: "Moby Dick" },
+            { question: "What film won the first-ever Academy Award for Best Picture?", answer: "Wings" },
+            { question: "Who directed the movie 'Inception'?", answer: "Christopher Nolan" },
+            { question: "Which film features the quote 'Houston, we have a problem'?", answer: "Apollo 13" },
+            { question: "What 1986 movie is about fighter pilots and features Tom Cruise?", answer: "Top Gun" },
+            { question: "Which movie is based on the life of William Wallace?", answer: "Braveheart" }
+        ];
+
+        let shuffledQuestions = [];
+        let questionIndex = 0;
+
+        // Shuffle the questions array
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize questions
+        function initializeQuestions() {
+            shuffledQuestions = shuffleArray([...movieQuestions]);
+            questionIndex = 0;
+            displayQuestion();
+        }
+
+        // Function to display the current question
+        function displayQuestion() {
+            if (shuffledQuestions.length === 0) {
+                questionAnswerDiv.innerHTML = "<strong>No more questions!</strong>";
+                return;
+            }
+            const currentQA = shuffledQuestions[questionIndex];
+            questionAnswerDiv.innerHTML = `<strong>Question:</strong> ${currentQA.question}<br><strong>Answer:</strong> ${currentQA.answer}`;
+        }
+
+        // Animate the yellow box when clicked
+        yellowBox.addEventListener("click", () => {
+            yellowBox.classList.add("animate-bounce");
+            setTimeout(() => {
+                yellowBox.classList.remove("animate-bounce");
+            }, 300);
+
+            questionIndex = (questionIndex + 1) % shuffledQuestions.length;
+            displayQuestion();
+        });
+
+        // Initialize questions on page load
+        window.onload = initializeQuestions;
+    </script>
+
+</body>
+</html>
